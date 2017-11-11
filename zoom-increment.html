@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Zoom Increments</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+
+<style type="text/css">
+body { margin:0; padding:0;}
+#map { position:absolute; top:0; bottom:0; width:100%;}
+#zoom-container {
+    position: fixed;
+    top: -5px;
+    left: 50px;
+    z-index: 401;
+    background-color: rgba(255,255,255,0.85);
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+select {
+    position: fixed;
+    top: 80px;
+    left: 50px;
+    z-index: 401;
+}
+</style>
+
+</head>
+<body>
+ <select onchange="changeIncrement(this)">
+  <option value="options0" selected>Zoom Increment 1.0</option>
+  <option value="options1">Zoom Increment 0.5</option>
+  <option value="options2">Zoom Increment 0.25</option>
+  <option value="options3">Zoom Increment 2.0</option>  
+</select> 
+<h1 id="zoom-container">Zoom Level: <span id="zoom-level"></span></h1>
+<div id='map'></div>
+
+<script>
+
+
+var map = L.map('map').setView([40.3,-77.5], 7);
+var streetsBasemap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {attribution: "<a href='http://www.esri.com/'>esri</a>"}).addTo(map);
+
+var zoom = document.getElementById("zoom-level");
+zoom.innerHTML = map.getZoom();
+
+map.on("zoomend", function () {
+    zoom.innerHTML = map.getZoom();
+});
+
+function changeIncrement(x){
+    if (x.value === "options0"){
+        map.options.zoomDelta = 1;
+        map.options.zoomSnap = 1;
+        map.options.wheelPxPerZoomLevel = 60;
+    }
+    if (x.value === "options1"){
+        map.options.zoomDelta = 0.5;
+        map.options.zoomSnap = 0.5;
+        map.options.wheelPxPerZoomLevel = 90;
+    }
+    if (x.value === "options2"){
+        map.options.zoomDelta = 0.25;
+        map.options.zoomSnap = 0.25;
+        map.options.wheelPxPerZoomLevel = 120;
+    }
+    if (x.value === "options3"){
+        map.options.zoomDelta = 2;
+        map.options.zoomSnap = 2;
+        map.options.wheelPxPerZoomLevel = 60;
+    }
+}
+
+
+
+
+</script>
+</body>
+</html>
